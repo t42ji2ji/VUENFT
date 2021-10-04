@@ -1,0 +1,19 @@
+#app {
+  color: red !important;
+}
+.flexCenter {
+  display: flex;
+  justify-content: center !important;
+  align-items: center !important;
+}
+.row {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  flex-direction: row;
+}
+.column {
+  display: flex;
+  justify-content: flex-start;
+  flex-direction: column;
+}
