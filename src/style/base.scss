@@ -1,6 +1,3 @@
-#app {
-  color: red !important;
-}
 .flexCenter {
   display: flex;
   justify-content: center !important;
@@ -16,4 +13,25 @@
   display: flex;
   justify-content: flex-start;
   flex-direction: column;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  column-gap: 30px;
+  row-gap: 30px;
+}
+
+.baseBgImg {
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+.btn {
+  width: 100%;
+  border-radius: 5px;
+  background-color: orange;
+  color: white;
+  padding: 5px 0px;
 }

@@ -7,6 +7,8 @@
 </template>
 
 <style lang="scss">
+@import url("https://fonts.googleapis.com/css2?family=Balsamiq+Sans:wght@400;700&display=swap");
+
 html,
 body {
   width: 100cw;
@@ -15,13 +17,14 @@ body {
 }
 
 #app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
+  font-family: "Balsamiq Sans", cursive;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #ececec;
   background: #161920;
   height: 100%;
+  overflow-y: scroll;
   //pattern
   background-color: #050506;
   opacity: 1;
