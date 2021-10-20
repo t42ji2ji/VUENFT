@@ -15,7 +15,7 @@ const privateKey =
     .trim() || '01234567890123456789';
 
 module.exports = {
-  defaultNetwork: 'hardhat',
+  defaultNetwork: 'ropsten',
   solidity: {
     version: '0.8.3',
     settings: {
