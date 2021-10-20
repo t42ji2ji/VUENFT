@@ -2,8 +2,8 @@
   "_format": "hh-sol-cache-2",
   "files": {
     "/Users/dora/work/nft_vue/contracts/Market.sol": {
-      "lastModificationDate": 1634098559584,
-      "contentHash": "950660f7bd7344068bbdcfbc62bf56e7",
+      "lastModificationDate": 1634121538210,
+      "contentHash": "4ef80289c3a4b1e63912bbab274f5241",
       "sourceName": "contracts/Market.sol",
       "solcConfig": {
         "version": "0.8.3",
@@ -463,7 +463,7 @@
       ]
     },
     "/Users/dora/work/nft_vue/contracts/NFT.sol": {
-      "lastModificationDate": 1634011697980,
+      "lastModificationDate": 1634121538218,
       "contentHash": "09e14aed19b2750f633b38567e9a7cf8",
       "sourceName": "contracts/NFT.sol",
       "solcConfig": {

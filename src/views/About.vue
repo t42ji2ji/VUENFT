@@ -1,18 +1,28 @@
 <template lang="pug">
 .about.column(style="align-items: center")
-  .spacer(style="height: 100px") in
+  .spacer(style="height: 100px") 
+  .test.column
+    .txt nft:0xbF8A0BB719d65dfdb75210f9F8DC7Eb2680A8D3F
+    .txt Market:0xa9d6A773D29e55Be823FA4ecae8e4EBC1c78143D
+  .row
+    .name nft
+    input(v-model="nftAddressModel")
+    .name Market
+    input(v-model="nftMarketAddressModel")
+    .btn(@click="changeNFTAddress") 搜尋
   .createSale(@click="createSale") createSale
+  .createSale(@click="test") test
 
   .grid
     .block.column(
-      v-for="item in [...(marketItems ?? []), ...(marketItems ?? []), ...(marketItems ?? [])]",
+      v-for="item in marketItems",
       style="align-items: flex-start",
       :ref="setItemRef"
     )
       .img.baseBgImg(
         :style="{ flex: 1, backgroundImage: `url(${item.metaData.image})` }"
       )
-      .title {{ item.metaData.name }}
+      .title {{ item.metaData.name }} / {{ item.tokenId }}
       .desc {{ item.metaData.description }}
       .price.btn.row.flexCenter(@click="buyNft(item)")
         .price {{ item.price }}
@@ -43,7 +53,10 @@ import { defineComponent, onMounted, ref, nextTick } from "vue";
 import { ethers } from "ethers";
 import Web3Modal from "web3modal";
 import axios from "axios";
-import { nftaddress, nftmarketaddress } from "@/assets/config/config";
+import {
+  nftaddress as defaultNftAddress,
+  nftmarketaddress as defaultNftMarketAddress,
+} from "@/assets/config/config";
 import NFT from "@/assets/config/NFT.json";
 import Market from "@/assets/config/NFTMarket.json";
 import { MarketItem } from "@/interface/base";
@@ -51,20 +64,29 @@ import { goTranslateX } from "@/animation/animation";
 export default defineComponent({
   name: "NFT",
   setup() {
+    var nftaddress = defaultNftAddress;
+    var nftmarketaddress = defaultNftMarketAddress;
+    var nftMarketAddressModel = ref(nftmarketaddress);
+    var nftAddressModel = ref(nftaddress);
     var marketItems = ref<Array<MarketItem>>();
     var myNFTItems = ref<Array<MarketItem>>();
     var blockRefs = ref<Array<HTMLFormElement>>([]);
     function setItemRef(el) {
-      console.log("el", el);
       if (el) {
         blockRefs.value.push(el);
       }
+    }
+    async function changeNFTAddress() {
+      nftmarketaddress = nftMarketAddressModel.value;
+      nftaddress = nftAddressModel.value;
+      await loadNFTs();
     }
     async function loadNFTs() {
       const web3Modal = new Web3Modal();
       const connection = await web3Modal.connect();
       const provider = new ethers.providers.Web3Provider(connection);
       const signer = provider.getSigner();
+      console.log("add", nftaddress, nftmarketaddress);
       const tokenContract = new ethers.Contract(nftaddress, NFT.abi, signer);
       const marketContract = new ethers.Contract(
         nftmarketaddress,
@@ -89,7 +111,6 @@ export default defineComponent({
             owner: i.owner,
             metaData: meta.data,
           } as MarketItem;
-          console.log(item);
           return item;
         }) as Array<MarketItem>
       );
@@ -135,6 +156,23 @@ export default defineComponent({
       await transaction.wait();
       loadNFTs();
     }
+    async function test() {
+      const web3Modal = new Web3Modal();
+      const connection = await web3Modal.connect();
+      const provider = new ethers.providers.Web3Provider(connection);
+      const signer = provider.getSigner();
+
+      let contract = new ethers.Contract(nftmarketaddress, Market.abi, signer);
+      console.log("filters", contract.filters);
+      const filter = {
+        address: nftmarketaddress,
+        fromBlock: 0,
+        toBlock: 10000,
+        // topics: [contract.interface.]
+      };
+      const logs = await provider.getLogs(filter);
+      console.log("logs", logs);
+    }
     async function createSale() {
       const url = "https://int.dev.sw.sensestar.live/nft/nft-2.json";
       const web3Modal = new Web3Modal();
@@ -149,7 +187,7 @@ export default defineComponent({
       let event = tx.events[0];
       let value = event.args[2];
       let tokenId = value.toNumber();
-
+      console.log("tx", tx);
       const price = ethers.utils.parseUnits("0.05", "ether");
 
       /* then list the item for sale on the marketplace */
@@ -157,13 +195,46 @@ export default defineComponent({
       let listingPrice = await contract.getListingPrice();
       listingPrice = listingPrice.toString();
 
+      // ================
+
+      console.log("filters", contract.filters);
+      const filter = {
+        address: nftmarketaddress,
+        fromBlock: 0,
+        toBlock: 10000,
+        // topics: [contract.interface],
+      };
+
+      contract.on(
+        "MarketItemCreated",
+        (itemId, nftContract, tokenId, seller, owner, price, sold) => {
+          console.log(
+            "contract on",
+            itemId,
+            nftContract,
+            tokenId,
+            seller,
+            owner,
+            price,
+            sold
+          );
+        }
+      );
+
+      // ==================
+
       transaction = await contract.createMarketItem(
         nftaddress,
         tokenId,
         price,
         { value: listingPrice }
       );
-      await transaction.wait();
+
+      var createdMarketItemRes = await transaction.wait();
+      console.log("createdMarketItem", createdMarketItemRes);
+
+      const logs = await provider.getLogs(filter);
+      console.log("logs", logs);
     }
     onMounted(async () => {
       loadNFTs();
@@ -176,6 +247,10 @@ export default defineComponent({
       setItemRef,
       blockRefs,
       myNFTItems,
+      test,
+      changeNFTAddress,
+      nftMarketAddressModel,
+      nftAddressModel,
     };
   },
 });
