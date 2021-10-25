@@ -17,7 +17,7 @@ body {
 }
 
 #app {
-  font-family: "Balsamiq Sans", cursive;
+  font-family: "Balsamiq Sans", "Arial", sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
