@@ -9,6 +9,7 @@ export interface MetaMaskInterface {
 }
 
 export interface MarketItem {
+  itemId: 0;
   price: '0.005';
   tokenId: 4;
   seller: '0x899bd466D50e861351fb1fAa303CaB08Bdb03725';

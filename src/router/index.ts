@@ -9,6 +9,12 @@ const routes: Array<RouteRecordRaw> = [
       import(/* webpackChunkName: "about" */ '../views/About.vue'),
   },
   {
+    path: '/mintNFT',
+    name: 'MintNFT',
+    component: () =>
+      import(/* webpackChunkName: "about" */ '../views/mintNFT.vue'),
+  },
+  {
     path: '/about',
     name: 'About',
     // route level code-splitting

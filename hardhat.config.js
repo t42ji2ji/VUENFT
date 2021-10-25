@@ -7,7 +7,6 @@ require('@nomiclabs/hardhat-ethers');
 const { API_URL, PRIVATE_KEY } = process.env;
 
 const fs = require('fs');
-console.log(API_URL, PRIVATE_KEY);
 const privateKey =
   fs
     .readFileSync('.secret')
@@ -15,7 +14,7 @@ const privateKey =
     .trim() || '01234567890123456789';
 
 module.exports = {
-  defaultNetwork: 'ropsten',
+  defaultNetwork: 'hardhat',
   solidity: {
     version: '0.8.3',
     settings: {

@@ -105,7 +105,8 @@ export default defineComponent({
           const meta = await axios.get(tokenUri);
           let price = ethers.utils.formatUnits(i.price.toString(), "ether");
           let item = {
-            price,
+            price: price,
+            itemId: i.itemId.toNumber(),
             tokenId: i.tokenId.toNumber(),
             seller: i.seller,
             owner: i.owner,
@@ -121,6 +122,7 @@ export default defineComponent({
           let price = ethers.utils.formatUnits(i.price.toString(), "ether");
           let item = {
             price,
+            itemId: i.itemId.toNumber(),
             tokenId: i.tokenId.toNumber(),
             seller: i.seller,
             owner: i.owner,
@@ -135,7 +137,7 @@ export default defineComponent({
       await nextTick();
       goTranslateX(blockRefs.value);
     }
-    async function buyNft(nft) {
+    async function buyNft(nft: MarketItem) {
       const web3Modal = new Web3Modal();
       const connection = await web3Modal.connect();
       const provider = new ethers.providers.Web3Provider(connection);
@@ -148,7 +150,7 @@ export default defineComponent({
       const price = ethers.utils.parseUnits(nft.price.toString(), "ether");
       const transaction = await contract.createMarketSale(
         nftaddress,
-        nft.tokenId,
+        nft.itemId,
         {
           value: price,
         }
@@ -162,16 +164,44 @@ export default defineComponent({
       const provider = new ethers.providers.Web3Provider(connection);
       const signer = provider.getSigner();
 
-      let contract = new ethers.Contract(nftmarketaddress, Market.abi, signer);
-      console.log("filters", contract.filters);
-      const filter = {
-        address: nftmarketaddress,
-        fromBlock: 0,
-        toBlock: 10000,
-        // topics: [contract.interface.]
-      };
-      const logs = await provider.getLogs(filter);
-      console.log("logs", logs);
+      let contract = new ethers.Contract(
+        "0xce82d65314502ce39472a2442d4a2cbc4cb9f293",
+        [
+          {
+            inputs: [
+              {
+                internalType: "uint256",
+                name: "tokenId",
+                type: "uint256",
+              },
+            ],
+            name: "tokenURI",
+            outputs: [
+              {
+                internalType: "string",
+                name: "",
+                type: "string",
+              },
+            ],
+            stateMutability: "view",
+            type: "function",
+          },
+        ],
+        signer
+      );
+      console.log("as contract", contract);
+      // console.log("filters", contract.filters);
+      // const filter = {
+      //   address: nftmarketaddress,
+      //   fromBlock: 0,
+      //   toBlock: 10000,
+      //   // topics: [contract.interface.]
+      // };
+      var res = await contract.tokenURI("3818");
+      console.log("as contract res", res);
+      const meta = await axios.get(res);
+
+      console.log("adaadadsd", meta);
     }
     async function createSale() {
       const url = "https://int.dev.sw.sensestar.live/nft/nft-2.json";

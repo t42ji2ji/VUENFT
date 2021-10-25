@@ -2,8 +2,8 @@
   "_format": "hh-sol-cache-2",
   "files": {
     "/Users/dora/work/nft_vue/contracts/Market.sol": {
-      "lastModificationDate": 1634121538210,
-      "contentHash": "4ef80289c3a4b1e63912bbab274f5241",
+      "lastModificationDate": 1635136669540,
+      "contentHash": "7da004f24b39c2cdf35b89daca2db3a5",
       "sourceName": "contracts/Market.sol",
       "solcConfig": {
         "version": "0.8.3",
@@ -29,8 +29,12 @@
       },
       "imports": [
         "@openzeppelin/contracts/utils/Counters.sol",
+        "@openzeppelin/contracts/access/Ownable.sol",
         "@openzeppelin/contracts/security/ReentrancyGuard.sol",
         "@openzeppelin/contracts/token/ERC721/ERC721.sol",
+        "./@rarible/royalties/contracts/impl/RoyaltiesV2Impl.sol",
+        "./@rarible/royalties/contracts/LibPart.sol",
+        "./@rarible/royalties/contracts/LibRoyaltiesV2.sol",
         "hardhat/console.sol"
       ],
       "versionPragmas": [
@@ -463,8 +467,8 @@
       ]
     },
     "/Users/dora/work/nft_vue/contracts/NFT.sol": {
-      "lastModificationDate": 1634121538218,
-      "contentHash": "09e14aed19b2750f633b38567e9a7cf8",
+      "lastModificationDate": 1635136334605,
+      "contentHash": "3632809988a797bd066f5245ece35f9f",
       "sourceName": "contracts/NFT.sol",
       "solcConfig": {
         "version": "0.8.3",
@@ -492,6 +496,7 @@
         "@openzeppelin/contracts/utils/Counters.sol",
         "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol",
         "@openzeppelin/contracts/token/ERC721/ERC721.sol",
+        "@openzeppelin/contracts/access/Ownable.sol",
         "hardhat/console.sol"
       ],
       "versionPragmas": [
@@ -535,6 +540,255 @@
       ],
       "artifacts": [
         "ERC721URIStorage"
+      ]
+    },
+    "/Users/dora/work/nft_vue/node_modules/@openzeppelin/contracts/access/Ownable.sol": {
+      "lastModificationDate": 1634011826594,
+      "contentHash": "4fe56b59ced59d87df6b796758f62895",
+      "sourceName": "@openzeppelin/contracts/access/Ownable.sol",
+      "solcConfig": {
+        "version": "0.8.3",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [
+        "../utils/Context.sol"
+      ],
+      "versionPragmas": [
+        "^0.8.0"
+      ],
+      "artifacts": [
+        "Ownable"
+      ]
+    },
+    "/Users/dora/work/nft_vue/contracts/@rarible/royalties/contracts/impl/AbstractRoyalties.sol": {
+      "lastModificationDate": 1635130247791,
+      "contentHash": "034e5b56c9149236b09aa7fdcfe13f7c",
+      "sourceName": "contracts/@rarible/royalties/contracts/impl/AbstractRoyalties.sol",
+      "solcConfig": {
+        "version": "0.8.3",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [
+        "../LibPart.sol"
+      ],
+      "versionPragmas": [
+        "^0.8.0"
+      ],
+      "artifacts": [
+        "AbstractRoyalties"
+      ]
+    },
+    "/Users/dora/work/nft_vue/contracts/@rarible/royalties/contracts/LibPart.sol": {
+      "lastModificationDate": 1635134342482,
+      "contentHash": "1f7462b4e6b4c7adfefcccf258741287",
+      "sourceName": "contracts/@rarible/royalties/contracts/LibPart.sol",
+      "solcConfig": {
+        "version": "0.8.3",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [],
+      "versionPragmas": [
+        "^0.8.0"
+      ],
+      "artifacts": [
+        "LibPart"
+      ]
+    },
+    "/Users/dora/work/nft_vue/contracts/@rarible/royalties/contracts/impl/RoyaltiesV2Impl.sol": {
+      "lastModificationDate": 1635133307511,
+      "contentHash": "d9f06a461a2f8848e581284ec33274d2",
+      "sourceName": "contracts/@rarible/royalties/contracts/impl/RoyaltiesV2Impl.sol",
+      "solcConfig": {
+        "version": "0.8.3",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [
+        "./AbstractRoyalties.sol",
+        "../RoyaltiesV2.sol"
+      ],
+      "versionPragmas": [
+        "^0.8.0"
+      ],
+      "artifacts": [
+        "RoyaltiesV2Impl"
+      ]
+    },
+    "/Users/dora/work/nft_vue/contracts/@rarible/royalties/contracts/RoyaltiesV2.sol": {
+      "lastModificationDate": 1635130247794,
+      "contentHash": "7bf24d92a5f74fd09f24e4c8ae8e58f3",
+      "sourceName": "contracts/@rarible/royalties/contracts/RoyaltiesV2.sol",
+      "solcConfig": {
+        "version": "0.8.3",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [
+        "./LibPart.sol"
+      ],
+      "versionPragmas": [
+        "^0.8.0"
+      ],
+      "artifacts": [
+        "RoyaltiesV2"
+      ]
+    },
+    "/Users/dora/work/nft_vue/contracts/@rarible/royalties/contracts/IRoyaltiesProvider.sol": {
+      "lastModificationDate": 1635133402775,
+      "contentHash": "01224e98b90dbb6e8562ad9063b4a406",
+      "sourceName": "contracts/@rarible/royalties/contracts/IRoyaltiesProvider.sol",
+      "solcConfig": {
+        "version": "0.8.3",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [
+        "./LibPart.sol"
+      ],
+      "versionPragmas": [
+        "^0.8.0"
+      ],
+      "artifacts": [
+        "IRoyaltiesProvider"
+      ]
+    },
+    "/Users/dora/work/nft_vue/contracts/@rarible/royalties/contracts/LibRoyaltiesV2.sol": {
+      "lastModificationDate": 1635133415997,
+      "contentHash": "94a44168e0060dcf1df4712ff39ab39c",
+      "sourceName": "contracts/@rarible/royalties/contracts/LibRoyaltiesV2.sol",
+      "solcConfig": {
+        "version": "0.8.3",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [],
+      "versionPragmas": [
+        "^0.8.0"
+      ],
+      "artifacts": [
+        "LibRoyaltiesV2"
       ]
     }
   }
