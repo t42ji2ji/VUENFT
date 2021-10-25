@@ -197,7 +197,7 @@ export default defineComponent({
       //   toBlock: 10000,
       //   // topics: [contract.interface.]
       // };
-      var res = await contract.tokenURI("3818");
+      var res = await contract.tokenURI("4071");
       console.log("as contract res", res);
       const meta = await axios.get(res);
 

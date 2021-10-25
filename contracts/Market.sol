@@ -47,6 +47,16 @@ contract NFTMarket is ReentrancyGuard, RoyaltiesV2Impl {
         bool hasRoyalty
     );
 
+    function setLisitingPrice(uint256 newlistingPrice) public {
+        require(msg.sender == owner, "You must own this contract");
+        listingPrice = newlistingPrice;
+    }
+
+    function setOwner(address newOwner) public {
+        require(msg.sender == owner, "You must own this contract");
+        owner = payable(newOwner);
+    }
+
     /* Returns the listing price of the contract */
     function getListingPrice() public view returns (uint256) {
         return listingPrice;

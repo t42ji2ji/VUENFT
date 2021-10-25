@@ -18,17 +18,37 @@ describe('RaribleRoyaltyERC721 Test', () => {
     nft = await NFT.deploy(market.address);
     await nft.deployed();
 
+    
+
     marketAddress = market.address;
     nftContractAddress = nft.address;
     auctionPrice = ethers.utils.parseUnits('10', 'ether');
-    listingPrice = await market.getListingPrice();
-    listingPrice = listingPrice.toString();
+  });
+
+  describe('Test set Owner', function() {
+    it('Should update owner', function(done) {
+      // market.setOwner(buyerAddress.address);
+      done();
+    });
+  });
+
+  describe('Test Listing Price Update', function() {
+    it('Should Update Listing Price', async function() {
+      const newAuctionPrice = ethers.utils.parseUnits('1', 'ether');
+      market.setLisitingPrice(newAuctionPrice);
+      let listingPrice = await market.getListingPrice();
+      listingPrice = listingPrice.toString();
+      console.log('listingPrice', listingPrice);
+    });
   });
 
   describe('NFT Rolity test', function() {
     it('Should create and execute market sales', async function() {
       ///
       /* deploy the marketplace */
+
+      listingPrice = await market.getListingPrice();
+      listingPrice = listingPrice.toString();
 
       await getBalance('buyer origin', buyerAddress);
       await getBalance('origin', _);

@@ -64,13 +64,13 @@ export default {
     async function randomNFT() {
       console.log("Taking a break...");
       let limitOfAttr = {
-        body: 0,
-        clothe: 7,
-        eye: 6,
-        glasses: 2, //can null
-        hair: 7, //can null
-        mouse: 0,
-        special: 4, //can null
+        body: 6,
+        clothe: 10,
+        eye: 8,
+        glasses: 4, //can null
+        hair: 10, //can null
+        mouse: 4,
+        special: 9, //can null
       };
       let canNullKey = ["glasses", "hair", "special"];
       for (const [key, value] of Object.entries(limitOfAttr)) {
@@ -111,7 +111,7 @@ export default {
   height: 100vh;
 }
 .cover {
-  background: rgba(0, 0, 0, 0.671);
+  background: rgba(0, 0, 0, 0.726);
   height: 100%;
   width: 100%;
   position: relative;
