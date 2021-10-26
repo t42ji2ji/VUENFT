@@ -1,8 +1,7 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 /* hardhat.config.js */
-require('@nomiclabs/hardhat-waffle');
-
 require('dotenv').config();
+require('@nomiclabs/hardhat-waffle');
 require('@nomiclabs/hardhat-ethers');
 const { API_URL, PRIVATE_KEY } = process.env;
 

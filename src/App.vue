@@ -11,7 +11,7 @@
 
 html,
 body {
-  width: 100cw;
+  width: 100vw;
   height: 100vh;
   margin: 0;
 }

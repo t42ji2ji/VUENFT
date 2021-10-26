@@ -3,11 +3,11 @@
 <template lang="pug">
 .mint.column.flexCenter
   .cardWrapper
-    .nftImg(ref="imgRef")
+    .nftImg(ref="imgRef", :style="{ background: `${bgColor}` }")
       .nftAttr(v-for="(value, index) in Object.entries(nft)", :id="value[0]")
         img(
           v-if="value[1] != null",
-          :src="require(`@/assets/nfts/${value[0]}/${value[1]}.png`)"
+          :src="require(`@/assets/nfts/${value[0] == 'special1' ? 'special' : value[0]}/${value[1]}.png`)"
         )
       .cover.flexCenter(v-if="reload != 0")
         .txt(v-if="reload != 0 && reload % 2 == 0") 抽出NFT..
@@ -29,42 +29,61 @@ import { toPng } from "html-to-image";
 import { sound } from "@pixi/sound";
 import JSConfetti from "js-confetti";
 
+interface nftData {
+  body: number;
+  clothe: number;
+  eye: number;
+  glasses: number;
+  hair: number;
+  mouse: number;
+  special: number;
+  special1: number;
+}
+
 export default {
   // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
   setup() {
     const imgRef = ref<HTMLElement>();
     var reload = ref<number>(0);
     const limitOfAttr = {
-      body: 6,
-      clothe: 10,
-      eye: 8,
+      body: 9,
+      clothe: 19,
+      eye: 10,
       glasses: 4, //can null
       hair: 10, //can null
-      mouse: 4,
-      special: 9, //can null
+      mouse: 7,
+      special: 13, //can null
     };
-    var nft = reactive({
-      body: null,
-      clothe: null,
-      eye: null,
-      glasses: null,
-      hair: null,
-      mouse: null,
-      special: null,
+    var nft = reactive<nftData>({
+      body: null as any,
+      clothe: null as any,
+      mouse: null as any,
+      hair: null as any,
+      eye: null as any,
+      glasses: null as any,
+      special: null as any,
+      special1: null as any,
     });
+    var bgColor = ref("");
     const firstTry = computed(() => {
       return nft.body == null;
     });
     const rarity = computed(() => {
       var rarity = 0;
-      if (nft.glasses != null) {
-        rarity += 23;
+      if (nft.glasses && nft.hair && nft.special && nft.special1) {
+        return 100;
       }
       if (nft.hair != null) {
         rarity += 21;
       }
+      if (nft.glasses != null) {
+        rarity += 21;
+      }
       if (nft.special != null) {
-        rarity += 26;
+        rarity += 20;
+      }
+      if (nft.special1 != null) {
+        rarity += 30;
       }
       return rarity;
     });
@@ -81,7 +100,6 @@ export default {
       for (var [key, value] of Object.entries(limitOfAttr)) {
         const image = new Image();
         for (var i = 0; i < value; i++) {
-          console.log(`@/assets/nfts/${key}/${i}.png`);
           image.src = `${require(`@/assets/nfts/${key}/${i}.png`)}`;
         }
       }
@@ -101,6 +119,7 @@ export default {
 
     function htmlToPng() {
       if (imgRef.value != null) {
+        console.log(imgRef.value);
         toPng(imgRef.value)
           .then(function (dataUrl) {
             download(dataUrl, "my-node.png");
@@ -128,19 +147,33 @@ export default {
 
     async function randomNFT() {
       const randomTimes = 20;
-
+      const colors = [
+        "orange",
+        "DarkGrey",
+        "CornflowerBlue",
+        "DarkViolet",
+        "Green",
+        "Turquoise",
+        "YellowGreen",
+      ];
       if (reload.value == 0) {
         sound.play("bird");
       }
 
       console.log("Taking a break...");
 
-      let canNullKey = ["glasses", "hair", "special"];
+      let canNullKey = ["glasses", "hair", "special", "special1"];
       for (const [key, value] of Object.entries(limitOfAttr)) {
         if (canNullKey.includes(key)) {
           // random empty attr
           if (getRandomInt(100) > 70) {
             nft[key] = getRandomInt(value);
+            if (getRandomInt(100) > 70 && key == "special") {
+              nft["special1"] = getRandomInt(value);
+            } else {
+              // eslint-disable-next-line @typescript-eslint/no-explicit-any
+              nft["special1"] = null as any;
+            }
           } else {
             nft[key] = null;
           }
@@ -148,6 +181,7 @@ export default {
           nft[key] = getRandomInt(value);
         }
       }
+      bgColor.value = colors[getRandomInt(colors.length)];
       reload.value += 1;
 
       if (reload.value > randomTimes - 5) {
@@ -169,7 +203,16 @@ export default {
 
       randomNFT();
     }
-    return { nft, randomNFT, reload, rarity, imgRef, htmlToPng, firstTry };
+    return {
+      nft,
+      randomNFT,
+      reload,
+      rarity,
+      imgRef,
+      htmlToPng,
+      firstTry,
+      bgColor,
+    };
   },
 };
 </script>

@@ -30,6 +30,7 @@ contract NFTMarket is ReentrancyGuard, RoyaltiesV2Impl {
         address payable seller;
         address payable owner;
         uint256 price;
+        uint96 royalties;
         bool sold;
         bool hasRoyalty;
     }
@@ -43,18 +44,19 @@ contract NFTMarket is ReentrancyGuard, RoyaltiesV2Impl {
         address seller,
         address owner,
         uint256 price,
+        uint96 royalties,
         bool sold,
         bool hasRoyalty
     );
 
-    function setLisitingPrice(uint256 newlistingPrice) public {
-        require(msg.sender == owner, "You must own this contract");
-        listingPrice = newlistingPrice;
-    }
-
     function setOwner(address newOwner) public {
         require(msg.sender == owner, "You must own this contract");
         owner = payable(newOwner);
+    }
+
+    function setLisitingPrice(uint256 newlistingPrice) public {
+        require(msg.sender == owner, "You must own this contract");
+        listingPrice = newlistingPrice;
     }
 
     /* Returns the listing price of the contract */
@@ -86,6 +88,7 @@ contract NFTMarket is ReentrancyGuard, RoyaltiesV2Impl {
             payable(msg.sender),
             payable(address(0)),
             price,
+            0,
             false,
             false
         );
@@ -99,6 +102,7 @@ contract NFTMarket is ReentrancyGuard, RoyaltiesV2Impl {
             msg.sender,
             address(0),
             price,
+            0,
             false,
             false
         );
@@ -150,6 +154,42 @@ contract NFTMarket is ReentrancyGuard, RoyaltiesV2Impl {
             MarketItem storage currentItem = idToMarketItem[currentId];
             items[currentIndex] = currentItem;
             currentIndex += 1;
+        }
+        return items;
+    }
+
+    /* Returns all unsold market items */
+    function fetchSpecificMarketItems(address nftContract, uint256 tokenId)
+        public
+        view
+        returns (MarketItem[] memory)
+    {
+        uint256 totalItemCount = _itemIds.current();
+        uint256 itemCount = 0;
+        uint256 currentIndex = 0;
+
+        for (uint256 i = 0; i < totalItemCount; i++) {
+            if (
+                idToMarketItem[i + 1].tokenId == tokenId &&
+                idToMarketItem[i + 1].nftContract == nftContract &&
+                idToMarketItem[i + 1].sold == false
+            ) {
+                itemCount += 1;
+            }
+        }
+
+        MarketItem[] memory items = new MarketItem[](itemCount);
+        for (uint256 i = 0; i < totalItemCount; i++) {
+            if (
+                idToMarketItem[i + 1].tokenId == tokenId &&
+                idToMarketItem[i + 1].nftContract == nftContract &&
+                idToMarketItem[i + 1].sold == false
+            ) {
+                uint256 currentId = i + 1;
+                MarketItem storage currentItem = idToMarketItem[currentId];
+                items[currentIndex] = currentItem;
+                currentIndex += 1;
+            }
         }
         return items;
     }
@@ -230,6 +270,7 @@ contract NFTMarket is ReentrancyGuard, RoyaltiesV2Impl {
         _royalties[0].value = _percentageBasisPoints;
         _royalties[0].account = _royaltiesReceipientAddress;
         idToMarketItem[itemId].hasRoyalty = true;
+        idToMarketItem[itemId].royalties = _percentageBasisPoints;
         _saveRoyalties(itemId, _royalties);
     }
 }

@@ -12,6 +12,7 @@ contract NFT is ERC721URIStorage, Ownable {
     using Counters for Counters.Counter;
     Counters.Counter private _tokenIds;
     address contractAddress;
+    uint256 mintPrice = 1 ether;
 
     constructor(address marketplaceAddress) ERC721("Metaverse", "METT") {
         contractAddress = marketplaceAddress;
@@ -34,7 +35,23 @@ contract NFT is ERC721URIStorage, Ownable {
         _mint(msg.sender, newItemId);
         _setTokenURI(newItemId, tokenURI);
         setApprovalForAll(contractAddress, true);
+        emit NFTCreated(newItemId, tokenURI);
 
+        return newItemId;
+    }
+
+    function createTokenWithCharge(string memory tokenURI)
+        public
+        payable
+        returns (uint256)
+    {
+        require(msg.value == mintPrice, "mint price incorrect");
+        _tokenIds.increment();
+        uint256 newItemId = _tokenIds.current();
+        _mint(msg.sender, newItemId);
+        _setTokenURI(newItemId, tokenURI);
+        setApprovalForAll(contractAddress, true);
+        payable(owner()).transfer(mintPrice);
         emit NFTCreated(newItemId, tokenURI);
 
         return newItemId;

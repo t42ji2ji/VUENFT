@@ -2,6 +2,8 @@
 /* test/sample-test.js */
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const { expect } = require('chai');
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const { ethers } = require('hardhat');
 
 describe('RaribleRoyaltyERC721 Test', () => {
   let market;
@@ -18,24 +20,60 @@ describe('RaribleRoyaltyERC721 Test', () => {
     nft = await NFT.deploy(market.address);
     await nft.deployed();
 
-    
-
     marketAddress = market.address;
     nftContractAddress = nft.address;
     auctionPrice = ethers.utils.parseUnits('10', 'ether');
+
+    listingPrice = await market.getListingPrice();
+    listingPrice = listingPrice.toString();
   });
 
-  describe('Test set Owner', function() {
-    it('Should update owner', function(done) {
-      // market.setOwner(buyerAddress.address);
-      done();
+  // describe('Test set Owner', function() {
+  //   it('Should update owner', function(done) {
+  //     market.setOwner(buyerAddress.address);
+  //     done();
+  //   });
+  // });
+  describe('Test get Specific Market Item', function() {
+    it('Should return MarketItem', async function() {
+      await nft.createToken('https://www.mytokenlocation.com');
+      await nft.createToken('https://www.mytokenlocation.com');
+      /* put both tokens for sale */
+      await market.createMarketItem(nftContractAddress, 2, auctionPrice, {
+        value: listingPrice,
+      });
+      var res = await market.fetchSpecificMarketItems(nftContractAddress, 2);
+      console.log('res', res[0]);
+    });
+  });
+  describe('Test set mint withMoney', function() {
+    it('Should mint withMoney', async function() {
+      const mintPrice = ethers.utils.parseUnits('1', 'ether');
+      await getBalance('buyBefore', buyerAddress);
+      // await nft.createTokenWithCharge({ value: mintPrice });
+      // await nft
+      //   .connect(buyerAddress)
+      //   .createTokenWithCharge('https://www.mytokenlocation.com', {
+      //     value: mintPrice,
+      //   });
+      // await nft
+      //   .connect(buyerAddress)
+      //   .createTokenWithCharge('https://www.mytokenlocation2.com', {
+      //     value: mintPrice,
+      //   });
+      // await nft
+      //   .connect(buyerAddress)
+      //   .createTokenWithCharge('https://www.mytokenlocation2.com', {
+      //     value: mintPrice,
+      //   });
+      await getBalance('buyAfter', buyerAddress);
     });
   });
 
   describe('Test Listing Price Update', function() {
     it('Should Update Listing Price', async function() {
-      const newAuctionPrice = ethers.utils.parseUnits('1', 'ether');
-      market.setLisitingPrice(newAuctionPrice);
+      const newlistingPrice = ethers.utils.parseUnits('0.025', 'ether');
+      market.setLisitingPrice(newlistingPrice);
       let listingPrice = await market.getListingPrice();
       listingPrice = listingPrice.toString();
       console.log('listingPrice', listingPrice);
@@ -46,9 +84,6 @@ describe('RaribleRoyaltyERC721 Test', () => {
     it('Should create and execute market sales', async function() {
       ///
       /* deploy the marketplace */
-
-      listingPrice = await market.getListingPrice();
-      listingPrice = listingPrice.toString();
 
       await getBalance('buyer origin', buyerAddress);
       await getBalance('origin', _);
@@ -123,9 +158,9 @@ describe('RaribleRoyaltyERC721 Test', () => {
         }
       });
 
-      // await market
-      //   .connect(thirdAddress)
-      //   .createMarketSale(nftContractAddress, itemId, { value: auctionPrice });
+      await market
+        .connect(buyerAddress)
+        .createMarketSale(nftContractAddress, itemId, { value: auctionPrice });
       // 重新上架 end ----------------------- //
 
       /* query for and return the unsold items */

@@ -16,19 +16,19 @@ async function scaleImage12(input, scale) {
 
 async function getScaleImage() {
   const limitOfAttr = {
-    body: 6,
-    clothe: 10,
-    eye: 8,
+    body: 9,
+    clothe: 19,
+    eye: 10,
     glasses: 4, //can null
     hair: 10, //can null
-    mouse: 4,
-    special: 9, //can null
+    mouse: 7,
+    special: 13, //can null
   };
   for (const [key, value] of Object.entries(limitOfAttr)) {
     for (var i = 0; i < value; i++) {
       console.log(`run: ./src/assets/nfts/${key}/${i}.png`);
       const inputBuffer = fs.readFileSync(`./src/assets/nfts/${key}/${i}.png`);
-      var outputBuffer = await scaleImage12(inputBuffer, 13);
+      var outputBuffer = await scaleImage12(inputBuffer, 6);
       fs.writeFileSync(`./src/assets/nfts/${key}/${i}.png`, outputBuffer);
       console.log(`finish: ./src/assets/nfts/${key}/${i}.png`);
     }
