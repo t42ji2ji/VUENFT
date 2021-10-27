@@ -18,11 +18,11 @@ async function getScaleImage() {
   const limitOfAttr = {
     body: 9,
     clothe: 19,
-    eye: 10,
+    eye: 12,
     glasses: 4, //can null
-    hair: 10, //can null
-    mouse: 7,
-    special: 13, //can null
+    hair: 12, //can null
+    mouse: 8,
+    special: 14, //can null
   };
   for (const [key, value] of Object.entries(limitOfAttr)) {
     for (var i = 0; i < value; i++) {

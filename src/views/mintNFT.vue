@@ -35,9 +35,9 @@ interface nftData {
   eye: number;
   glasses: number;
   hair: number;
-  mouse: number;
   special: number;
   special1: number;
+  mouse: number;
 }
 
 export default {
@@ -48,21 +48,21 @@ export default {
     const limitOfAttr = {
       body: 9,
       clothe: 19,
-      eye: 10,
+      eye: 12,
       glasses: 4, //can null
-      hair: 10, //can null
-      mouse: 7,
-      special: 13, //can null
+      hair: 12, //can null
+      mouse: 8,
+      special: 14,
     };
     var nft = reactive<nftData>({
-      body: null as any,
-      clothe: null as any,
-      mouse: null as any,
-      hair: null as any,
-      eye: null as any,
-      glasses: null as any,
-      special: null as any,
-      special1: null as any,
+      body: null as never,
+      clothe: null as never,
+      eye: null as never,
+      special: null as never,
+      special1: null as never,
+      glasses: null as never,
+      hair: null as never,
+      mouse: null as never,
     });
     var bgColor = ref("");
     const firstTry = computed(() => {
