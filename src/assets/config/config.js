@@ -1,7 +1,8 @@
 // ropsten
 
-export const nftmarketaddress = '0x6a92ebe8cefB8961a6139Ca09a78F69e2394548A';
-export const nftaddress = '0xB979e8917d1bEd4FF6181AF17e123b95B14EC310';
+export const nftmarketaddress = '0x722ad176E68dabb4a994476Fd505915Ef8C71010';
+export const nftaddress = '0x88Ef4cEDF4d5B960b5b7Ed382bfb0c3aB82Da9Cb';
+export const ERC20address = '0xc778417e063141139fce010982780140aa0cd5ab';
 
 // local
 

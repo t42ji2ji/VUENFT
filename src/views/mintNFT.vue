@@ -166,7 +166,7 @@ export default {
       for (const [key, value] of Object.entries(limitOfAttr)) {
         if (canNullKey.includes(key)) {
           // random empty attr
-          if (getRandomInt(100) > 70) {
+          if (getRandomInt(100) > 50) {
             nft[key] = getRandomInt(value);
             if (getRandomInt(100) > 70 && key == "special") {
               nft["special1"] = getRandomInt(value);

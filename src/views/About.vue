@@ -1,6 +1,12 @@
 <template lang="pug">
 .about.column(style="align-items: center")
   .spacer(style="height: 100px") 
+  iframe#myId(
+    src="https://app.uniswap.org/#/swap?theme=light&outputCurrency=0xc778417e063141139fce010982780140aa0cd5ab&inputCurrency=ETH",
+    height="660px",
+    width="100%",
+    style="border: 0; margin: 0 auto; display: block; border-radius: 10px; max-width: 600px; min-width: 300px"
+  )
   .test.column
     .txt nft:0xbF8A0BB719d65dfdb75210f9F8DC7Eb2680A8D3F
     .txt Market:0xa9d6A773D29e55Be823FA4ecae8e4EBC1c78143D
@@ -56,9 +62,11 @@ import axios from "axios";
 import {
   nftaddress as defaultNftAddress,
   nftmarketaddress as defaultNftMarketAddress,
+  ERC20address as erc20Address,
 } from "@/assets/config/config";
 import NFT from "@/assets/config/NFT.json";
 import Market from "@/assets/config/NFTMarket.json";
+import ERC20 from "@/assets/config/ERC20.json";
 import { MarketItem } from "@/interface/base";
 import { goTranslateX } from "@/animation/animation";
 export default defineComponent({
@@ -66,6 +74,7 @@ export default defineComponent({
   setup() {
     var nftaddress = defaultNftAddress;
     var nftmarketaddress = defaultNftMarketAddress;
+    var wethAddress = erc20Address;
     var nftMarketAddressModel = ref(nftmarketaddress);
     var nftAddressModel = ref(nftaddress);
     var marketItems = ref<Array<MarketItem>>();
@@ -97,6 +106,7 @@ export default defineComponent({
       console.log("tokenContract", tokenContract);
       console.log("marketContract", marketContract);
       const data = (await marketContract.functions.fetchMarketItems())[0];
+      console.log("data", await marketContract.functions.fetchMarketItems());
       const myNFTdata = (await marketContract.functions.fetchMyNFTs())[0];
 
       const items = await Promise.all(
@@ -163,33 +173,33 @@ export default defineComponent({
       const connection = await web3Modal.connect();
       const provider = new ethers.providers.Web3Provider(connection);
       const signer = provider.getSigner();
-
-      let contract = new ethers.Contract(
-        "0xce82d65314502ce39472a2442d4a2cbc4cb9f293",
-        [
-          {
-            inputs: [
-              {
-                internalType: "uint256",
-                name: "tokenId",
-                type: "uint256",
-              },
-            ],
-            name: "tokenURI",
-            outputs: [
-              {
-                internalType: "string",
-                name: "",
-                type: "string",
-              },
-            ],
-            stateMutability: "view",
-            type: "function",
-          },
-        ],
+      let contract = new ethers.Contract(wethAddress, ERC20.abi, signer);
+      console.log("erc20 contract", contract);
+      let price = ethers.utils.formatUnits(
+        (await contract.balanceOf(signer.getAddress())).toString(),
+        "ether"
+      );
+      const marketContract = new ethers.Contract(
+        nftmarketaddress,
+        Market.abi,
         signer
       );
-      console.log("as contract", contract);
+      var res = marketContract.functions.fetchMyNFTs();
+      console.log("res", res);
+      console.log("erc20 contract", price);
+      let wei = ethers.utils.parseEther("10");
+      // var res = await contract.approve(nftmarketaddress, wei);
+      // console.log(res);
+
+      var res2 = await contract.allowance(
+        signer.getAddress(),
+        nftmarketaddress
+      );
+      console.log(
+        "lock contract",
+        ethers.utils.formatUnits(res2.toString(), "ether")
+      );
+
       // console.log("filters", contract.filters);
       // const filter = {
       //   address: nftmarketaddress,
@@ -197,11 +207,9 @@ export default defineComponent({
       //   toBlock: 10000,
       //   // topics: [contract.interface.]
       // };
-      var res = await contract.tokenURI("4071");
-      console.log("as contract res", res);
-      const meta = await axios.get(res);
-
-      console.log("adaadadsd", meta);
+      // var res = await contract.tokenURI("4071");
+      // console.log("as contract res", res);
+      // const meta = await axios.get(res);
     }
     async function createSale() {
       const url = "https://int.dev.sw.sensestar.live/nft/nft-2.json";

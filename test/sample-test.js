@@ -36,6 +36,29 @@ describe('RaribleRoyaltyERC721 Test', () => {
   // });
   describe('Test get Specific Market Item', function() {
     it('Should return MarketItem', async function() {
+      var res1 = await nft.balanceOf(thirdAddress.address);
+
+      console.log('thirdAddress', res1.toString());
+
+      await nft.createToken('https://www.mytokenlocation.com');
+      await nft.createToken('https://www.mytokenlocation.com');
+      /* put both tokens for sale */
+      await market.createMarketItem(nftContractAddress, 1, auctionPrice, {
+        value: listingPrice,
+      });
+      var xx = await market.fetchMarketItems();
+      console.log('xx', xx);
+      await market
+        .connect(thirdAddress)
+        .createMarketSale(nftContractAddress, 1, { value: auctionPrice });
+      var res2 = await nft.balanceOf(thirdAddress.address);
+      console.log('thirdAddress', res2.toString());
+      var res = await market.fetchSpecificMarketItems(nftContractAddress, 2);
+      console.log('res', res[0]);
+    });
+  });
+  describe('Test get Specific Market Item', function() {
+    it('Should return MarketItem', async function() {
       await nft.createToken('https://www.mytokenlocation.com');
       await nft.createToken('https://www.mytokenlocation.com');
       /* put both tokens for sale */

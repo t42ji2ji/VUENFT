@@ -40,6 +40,22 @@ contract NFT is ERC721URIStorage, Ownable {
         return newItemId;
     }
 
+    function createTokenOnlyOwner(string memory tokenURI)
+        public
+        onlyOwner
+        returns (uint256)
+    {
+        _tokenIds.increment();
+        uint256 newItemId = _tokenIds.current();
+
+        _mint(msg.sender, newItemId);
+        _setTokenURI(newItemId, tokenURI);
+        setApprovalForAll(contractAddress, true);
+        emit NFTCreated(newItemId, tokenURI);
+
+        return newItemId;
+    }
+
     function createTokenWithCharge(string memory tokenURI)
         public
         payable

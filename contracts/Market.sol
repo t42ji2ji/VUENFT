@@ -273,4 +273,8 @@ contract NFTMarket is ReentrancyGuard, RoyaltiesV2Impl {
         idToMarketItem[itemId].royalties = _percentageBasisPoints;
         _saveRoyalties(itemId, _royalties);
     }
+
+    // function setTimeLock() public {
+    //     ERC20
+    // }
 }
