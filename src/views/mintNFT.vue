@@ -4,7 +4,11 @@
 .mint.column.flexCenter
   .cardWrapper
     .nftImg(ref="imgRef", :style="{ background: `${bgColor}` }")
-      .nftAttr(v-for="(value, index) in Object.entries(nft)", :id="value[0]")
+      .nftAttr(
+        v-for="(value, index) in Object.entries(nft)",
+        :id="value[0]",
+        :ref="setItemRef"
+      )
         img(
           v-if="value[1] != null",
           :src="require(`@/assets/nfts/${value[0] == 'special1' ? 'special' : value[0]}/${value[1]}.png`)"
@@ -24,10 +28,18 @@
 </template>
 
 <script lang="ts">
-import { ref, reactive, onBeforeMount, computed, onMounted } from "vue";
+import {
+  ref,
+  reactive,
+  onBeforeMount,
+  computed,
+  onMounted,
+  onBeforeUpdate,
+} from "vue";
 import { toPng } from "html-to-image";
 import { sound } from "@pixi/sound";
 import JSConfetti from "js-confetti";
+import { birdMove } from "@/animation/animation";
 
 interface nftData {
   body: number;
@@ -46,13 +58,13 @@ export default {
     const imgRef = ref<HTMLElement>();
     var reload = ref<number>(0);
     const limitOfAttr = {
-      body: 9,
+      body: 11,
       clothe: 19,
-      eye: 12,
-      glasses: 4, //can null
-      hair: 12, //can null
-      mouse: 8,
-      special: 14,
+      eye: 14,
+      glasses: 5, //can null
+      hair: 13, //can null
+      mouse: 10,
+      special: 16,
     };
     var nft = reactive<nftData>({
       body: null as never,
@@ -68,6 +80,7 @@ export default {
     const firstTry = computed(() => {
       return nft.body == null;
     });
+
     const rarity = computed(() => {
       var rarity = 0;
       if (nft.glasses && nft.hair && nft.special && nft.special1) {
@@ -93,10 +106,30 @@ export default {
     sound.add("waiting", `${require("@/assets/sound/waiting.wav")}`);
     sound.add("bird", `${require("@/assets/sound/bird.mp3")}`);
 
+    var blockRefs = ref<Array<HTMLFormElement>>([]);
+    function setItemRef(el) {
+      if (el) {
+        blockRefs.value.push(el);
+      }
+    }
+    const birdRefShouldMove = computed(() => {
+      if (blockRefs.value) {
+        return [...blockRefs.value.slice(2, 7)];
+      }
+      return [];
+    });
+
     const jsConfetti = new JSConfetti();
+    var birdAnimationController;
+    var mouseXY = [0, 0];
+
+    onBeforeUpdate(() => {
+      blockRefs.value = [];
+    });
 
     onBeforeMount(() => {
       // randomNFT();
+      blockRefs.value = [];
       for (var [key, value] of Object.entries(limitOfAttr)) {
         const image = new Image();
         for (var i = 0; i < value; i++) {
@@ -106,7 +139,49 @@ export default {
     });
 
     onMounted(() => {
-      console.log(imgRef.value); // <div>This is a root element</div>
+      document.addEventListener("mousemove", function (e) {
+        // birdAnimationController = birdMove(birdRefShouldMove.value, mouseXY);
+        if (birdRefShouldMove.value != null) {
+          //           body: null as never,
+          // clothe: null as never,
+          // eye: null as never,
+          // special: null as never,
+          // special1: null as never,
+          // glasses: null as never,
+          // hair: null as never,
+          // mouse: null as never,
+          // let height = blockRefs.value[0].offsetHeight;
+          let xAxis = -(window.innerWidth / 2 - e.pageX) / 20 / 2;
+
+          // mouseXY[0] = xAxis;
+          // mouseXY[1] = yAxis;
+
+          // return {
+          //   translateX: matrix.m41,
+          //   translateY: matrix.m42,
+          // };
+          blockRefs.value[2].style.transform = `translateX(${
+            xAxis < 0 ? xAxis / 4 : xAxis
+          }px)`;
+          blockRefs.value[5].style.transform = `translateX(${
+            xAxis < 0 ? xAxis / 4 : xAxis
+          }px)`;
+          blockRefs.value[4].style.transform = `translateX(${
+            xAxis < 0 ? xAxis / 4 : xAxis
+          }px)`;
+          blockRefs.value[3].style.transform = `translateX(${
+            xAxis < 0 ? xAxis / 4 : xAxis
+          }px)`;
+          //hair
+          blockRefs.value[6].style.transform = `translateX(${
+            xAxis < 0 ? (xAxis * 0.8) / 4 : xAxis * 0.9 * 0.7
+          }px)`;
+          //mouse;
+          blockRefs.value[7].style.transform = `translateX(${
+            xAxis < 0 ? (xAxis * 0.8) / 4 : xAxis * 0.9 * 1.5
+          }px)`;
+        }
+      });
     });
 
     function download(uri, name) {
@@ -146,7 +221,7 @@ export default {
     }
 
     async function randomNFT() {
-      const randomTimes = 20;
+      const randomTimes = 10;
       const colors = [
         "orange",
         "DarkGrey",
@@ -158,6 +233,7 @@ export default {
       ];
       if (reload.value == 0) {
         sound.play("bird");
+        // birdAnimationController.pause();
       }
 
       console.log("Taking a break...");
@@ -196,7 +272,7 @@ export default {
         reload.value = 0;
         sound.stop("bird");
         jsConfetti.addConfetti();
-
+        // birdAnimationController.play();
         playConfiti();
         return;
       }
@@ -212,6 +288,7 @@ export default {
       htmlToPng,
       firstTry,
       bgColor,
+      setItemRef,
     };
   },
 };

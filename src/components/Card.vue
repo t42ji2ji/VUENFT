@@ -9,7 +9,6 @@
 </template>
 
 <script lang="ts">
-1;
 import { onMounted, ref, defineComponent, computed } from "vue";
 import { MetaMaskInterface } from "@/interface/base";
 

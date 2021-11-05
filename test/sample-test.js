@@ -5,7 +5,7 @@ const { expect } = require('chai');
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const { ethers } = require('hardhat');
 
-describe('RaribleRoyaltyERC721 Test', () => {
+describe('NFT Test', () => {
   let market;
   let nft;
 
@@ -35,26 +35,19 @@ describe('RaribleRoyaltyERC721 Test', () => {
   //   });
   // });
   describe('Test get Specific Market Item', function() {
-    it('Should return MarketItem', async function() {
+    it('Should Return 100 items', async function() {
       var res1 = await nft.balanceOf(thirdAddress.address);
 
       console.log('thirdAddress', res1.toString());
-
-      await nft.createToken('https://www.mytokenlocation.com');
-      await nft.createToken('https://www.mytokenlocation.com');
-      /* put both tokens for sale */
-      await market.createMarketItem(nftContractAddress, 1, auctionPrice, {
-        value: listingPrice,
-      });
-      var xx = await market.fetchMarketItems();
-      console.log('xx', xx);
-      await market
-        .connect(thirdAddress)
-        .createMarketSale(nftContractAddress, 1, { value: auctionPrice });
-      var res2 = await nft.balanceOf(thirdAddress.address);
-      console.log('thirdAddress', res2.toString());
-      var res = await market.fetchSpecificMarketItems(nftContractAddress, 2);
-      console.log('res', res[0]);
+      for (var i = 1; i < 100; i++) {
+        await nft.createToken('https://www.mytokenlocation.com');
+        /* put both tokens for sale */
+        await market.createMarketItem(nftContractAddress, i, auctionPrice, {
+          value: listingPrice,
+        });
+      }
+      var res = await market.fetchMarketItems();
+      console.log('res', res);
     });
   });
   describe('Test get Specific Market Item', function() {

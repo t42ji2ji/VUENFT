@@ -467,8 +467,8 @@
       ]
     },
     "/Users/dora/work/nft_vue/contracts/NFT.sol": {
-      "lastModificationDate": 1635240712629,
-      "contentHash": "8c005e6fbd872b99e7582c1c9e1bc5a8",
+      "lastModificationDate": 1635399814518,
+      "contentHash": "0f2cae2ccd4e5e1d3ab948e116f35d50",
       "sourceName": "contracts/NFT.sol",
       "solcConfig": {
         "version": "0.8.3",
@@ -497,6 +497,7 @@
         "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol",
         "@openzeppelin/contracts/token/ERC721/ERC721.sol",
         "@openzeppelin/contracts/access/Ownable.sol",
+        "@openzeppelin/contracts/interfaces/IERC2981.sol",
         "hardhat/console.sol"
       ],
       "versionPragmas": [
@@ -790,6 +791,76 @@
       "artifacts": [
         "LibRoyaltiesV2"
       ]
+    },
+    "/Users/dora/work/nft_vue/node_modules/@openzeppelin/contracts/interfaces/IERC2981.sol": {
+      "lastModificationDate": 1635217778659,
+      "contentHash": "6d2f339001c6b40dc85e527f05cee321",
+      "sourceName": "@openzeppelin/contracts/interfaces/IERC2981.sol",
+      "solcConfig": {
+        "version": "0.8.3",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [
+        "./IERC165.sol"
+      ],
+      "versionPragmas": [
+        "^0.8.0"
+      ],
+      "artifacts": [
+        "IERC2981"
+      ]
+    },
+    "/Users/dora/work/nft_vue/node_modules/@openzeppelin/contracts/interfaces/IERC165.sol": {
+      "lastModificationDate": 1635217778656,
+      "contentHash": "5db2f57f2c2299039a26ab37235d87e2",
+      "sourceName": "@openzeppelin/contracts/interfaces/IERC165.sol",
+      "solcConfig": {
+        "version": "0.8.3",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [
+        "../utils/introspection/IERC165.sol"
+      ],
+      "versionPragmas": [
+        "^0.8.0"
+      ],
+      "artifacts": []
     }
   }
 }

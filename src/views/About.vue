@@ -18,6 +18,7 @@
     .btn(@click="changeNFTAddress") 搜尋
   .createSale(@click="createSale") createSale
   .createSale(@click="test") test
+  .createSale(@click="testMyF") testMyF
 
   .grid
     .block.column(
@@ -73,7 +74,8 @@ export default defineComponent({
   name: "NFT",
   setup() {
     var nftaddress = defaultNftAddress;
-    var nftmarketaddress = defaultNftMarketAddress;
+    var nftmarketaddress = "0x6a92ebe8cefB8961a6139Ca09a78F69e2394548A";
+    // var nftmarketaddress = defaultNftMarketAddress;
     var wethAddress = erc20Address;
     var nftMarketAddressModel = ref(nftmarketaddress);
     var nftAddressModel = ref(nftaddress);
@@ -168,6 +170,17 @@ export default defineComponent({
       await transaction.wait();
       loadNFTs();
     }
+    async function testMyF() {
+      const web3Modal = new Web3Modal();
+      const connection = await web3Modal.connect();
+      const provider = new ethers.providers.Web3Provider(connection);
+      const signer = provider.getSigner();
+      let market = new ethers.Contract(nftmarketaddress, Market.abi, signer);
+      console.log("fetchMyNFTs", await market.fetchMyNFTs());
+      // console.log("fetchAllItems", await market.fetchAllItems());
+      console.log("fetchItemsCreated", await market.fetchItemsCreated());
+      console.log("fetchMarketItems", await market.fetchMarketItems());
+    }
     async function test() {
       const web3Modal = new Web3Modal();
       const connection = await web3Modal.connect();
@@ -175,6 +188,7 @@ export default defineComponent({
       const signer = provider.getSigner();
       let contract = new ethers.Contract(wethAddress, ERC20.abi, signer);
       console.log("erc20 contract", contract);
+      // 0xa9d6A773D29e55Be823FA4ecae8e4EBC1c78143D
       let price = ethers.utils.formatUnits(
         (await contract.balanceOf(signer.getAddress())).toString(),
         "ether"
@@ -289,6 +303,7 @@ export default defineComponent({
       changeNFTAddress,
       nftMarketAddressModel,
       nftAddressModel,
+      testMyF,
     };
   },
 });
